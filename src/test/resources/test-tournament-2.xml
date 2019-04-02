@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tournament typeversion="9">
     <NumberOfRounds>5</NumberOfRounds>
-    <CurrentRoundNumber>1</CurrentRoundNumber>
+    <CurrentRoundNumber>2</CurrentRoundNumber>
     <TakeCurrentRoundInAccount>false</TakeCurrentRoundInAccount>
     <Name><![CDATA[EGC test tournament]]></Name>
     <Description><![CDATA[Time settings: blablabla
@@ -2300,7 +2300,35 @@ Table 51-60 are in room D]]></Description>
     </TournamentRound>
     <TournamentRound typeversion="2">
         <RoundNumber>2</RoundNumber>
-        <LastUpdated>2019-04-02 13:55:33</LastUpdated>
+        <LastUpdated>2019-04-02 19:54:49</LastUpdated>
+        <Pairing typeversion="2">
+            <ForcedPairing>true</ForcedPairing>
+            <PairingWithBye>false</PairingWithBye>
+            <Black>2</Black>
+            <White>3</White>
+            <Handicap>0</Handicap>
+            <AllowJigo>false</AllowJigo>
+            <Result>?-?</Result>
+            <ResultByReferee>false</ResultByReferee>
+            <ResultPoints>0</ResultPoints>
+            <BoardNumber>1</BoardNumber>
+            <BoardNumberFixed>false</BoardNumberFixed>
+            <CreationTime>2019-04-02 19:54:49</CreationTime>
+        </Pairing>
+        <Pairing typeversion="2">
+            <ForcedPairing>true</ForcedPairing>
+            <PairingWithBye>false</PairingWithBye>
+            <Black>4</Black>
+            <White>1</White>
+            <Handicap>0</Handicap>
+            <AllowJigo>false</AllowJigo>
+            <Result>?-?</Result>
+            <ResultByReferee>false</ResultByReferee>
+            <ResultPoints>0</ResultPoints>
+            <BoardNumber>2</BoardNumber>
+            <BoardNumberFixed>false</BoardNumberFixed>
+            <CreationTime>2019-04-02 19:54:49</CreationTime>
+        </Pairing>
     </TournamentRound>
     <TournamentRound typeversion="2">
         <RoundNumber>3</RoundNumber>

@@ -1,6 +1,6 @@
 package be.vlproject.egcevent.mail.domain;
 
-public class TemplateValues {
+public class PairingTemplateValues {
 
     private final String email;
     private final String firstName;
@@ -8,21 +8,23 @@ public class TemplateValues {
 
     private final String opponentFirstName;
     private final String opponentLastName;
+    private final String opponentLevel;
 
     private final String table;
-    private final String colour;
+    private final String color;
 
     private final String tournamentName;
     private final String boardSize;
     private final String roundNumber;
     private final String description;
 
-    public TemplateValues(
+    public PairingTemplateValues(
             final String email,
             final String firstName,
             final String lastName,
             final String opponentFirstName,
             final String opponentLastName,
+            final String opponentLevel,
             final String table,
             final String colour,
             final String tournamentName,
@@ -34,8 +36,9 @@ public class TemplateValues {
         this.lastName = lastName;
         this.opponentFirstName = opponentFirstName;
         this.opponentLastName = opponentLastName;
+        this.opponentLevel = opponentLevel;
         this.table = table;
-        this.colour = colour;
+        this.color = colour;
         this.tournamentName = tournamentName;
         this.boardSize = boardSize;
         this.roundNumber = roundNumber;
@@ -66,8 +69,20 @@ public class TemplateValues {
         return table;
     }
 
-    public String getColour() {
-        return colour;
+    public String getColor() {
+        return color;
+    }
+
+    public String getOpponentLevel() {
+        return opponentLevel;
+    }
+
+    public String getBoardSize() {
+        return boardSize;
+    }
+
+    public String getRoundNumber() {
+        return roundNumber;
     }
 
     public String getTournamentName() {

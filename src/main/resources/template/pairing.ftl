@@ -1,17 +1,30 @@
 <html xmlns="http://www.w3.org/1999/html">
 <body>
-<h3>Hi ${player}</h3>
-
 <p>
-    Paring of <span style="font-weight: bold"> ${tournament} </span> round <span
-        style="font-weight: bold"> ${round}</span> is done
-    <br>
-    You will play againts <span style="font-weight: bold; text-decoration: underline"> ${opponent} </span> at table
-    <span style="font-weight: bold"> ${table} </span>
+    Dear ${firstName} ${lastName},
 </p>
-
+<p>
+    Welcome to <span style="font-weight: bold">${tournamentName}</span> round <span
+        style="font-weight: bold"> ${roundNumber}</span> !
+</p>
+<p>
+    Your opponent is <span style="font-weight: bold">${opponentFirstName} ${opponentLastName} ${opponentLevel}</span>.
+    Please go to table <span style="font-weight: bold">${table}</span>
+    <br>
+    You are playing <span style="font-weight: bold">${color}</span>
+</p>
+<p>
+    Tournament rules:
+    <br>
+    This is a ${boardSize}x${boardSize} tournament.
+    <br>
+    ${description}
+</p>
+<p>
+    Have a nice game and a lovely time in Brussels !
+</p>
 <p style="font-size: .75em">
-    Enjoy your game ! The EGC 2019 team
+    If you don't want to receive this e-mails please inform people at registration desk
 </p>
 </body>
 </html>
