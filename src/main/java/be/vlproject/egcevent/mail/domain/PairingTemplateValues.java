@@ -13,6 +13,8 @@ public class TemplateValues {
     private final String colour;
 
     private final String tournamentName;
+    private final String boardSize;
+    private final String roundNumber;
     private final String description;
 
     public TemplateValues(
@@ -24,6 +26,8 @@ public class TemplateValues {
             final String table,
             final String colour,
             final String tournamentName,
+            final String boardSize,
+            final String roundNumber,
             final String description) {
         this.email = email;
         this.firstName = firstName;
@@ -33,6 +37,8 @@ public class TemplateValues {
         this.table = table;
         this.colour = colour;
         this.tournamentName = tournamentName;
+        this.boardSize = boardSize;
+        this.roundNumber = roundNumber;
         this.description = description;
     }
 
