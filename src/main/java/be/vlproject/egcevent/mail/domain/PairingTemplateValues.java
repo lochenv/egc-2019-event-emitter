@@ -1,5 +1,11 @@
 package be.vlproject.egcevent.mail.domain;
 
+import org.springframework.util.StringUtils;
+import org.springframework.web.util.HtmlUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class PairingTemplateValues {
 
     private final String email;
@@ -91,5 +97,25 @@ public class PairingTemplateValues {
 
     public String getDescription() {
         return description;
+    }
+    
+    public Map<String, Object> toMap() {
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", getFirstName());
+        model.put("lastName", getLastName());
+        model.put("tournamentName", getTournamentName());
+        model.put("roundNumber", getRoundNumber());
+        model.put("opponentFirstName", getOpponentFirstName());
+        model.put("opponentLastName", getOpponentLastName());
+        model.put("opponentLevel", getOpponentLevel());
+        model.put("table", getTable());
+        model.put("color", getColor());
+        model.put("boardSize", getBoardSize());
+        if (StringUtils.hasText(getDescription())) {
+            model.put("description",
+                    HtmlUtils.htmlEscape(getDescription(), "UTF-8")
+                            .replaceAll("(?:\\r\\n|\\r|\\n)","<br>"));
+        }
+        return model;
     }
 }

@@ -18,6 +18,11 @@
         <java.version>1.8</java.version>
         <hsqldb.version>2.4.0</hsqldb.version>
         <easymock.version>4.0.2</easymock.version>
+        <flexmark.version>0.40.32</flexmark.version>
+        <apache.common.version>3.8.1</apache.common.version>
+        <apache.poi.version>4.0.1</apache.poi.version>
+        <apache.pdfbox.version>2.0.7</apache.pdfbox.version>
+        <pdf2dom.version>1.7</pdf2dom.version>
     </properties>
 
     <dependencyManagement>
@@ -27,6 +32,40 @@
                 <artifactId>hsqldb</artifactId>
                 <version>${hsqldb.version}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+            <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache.common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-examples</artifactId>
+                <version>${apache.poi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${apache.poi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.vladsch.flexmark</groupId>
+                <artifactId>flexmark-pdf-converter</artifactId>
+                <version>0.40.32</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.5.8</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -48,6 +87,35 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
+
+        <!-- Common Utils -->
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-examples</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-pdf-converter</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
 
         <!-- Testing -->
         <dependency>

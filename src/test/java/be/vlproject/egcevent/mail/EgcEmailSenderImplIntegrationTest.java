@@ -44,17 +44,23 @@ public class EgcEmailSenderImplIntegrationTest {
     private Template pairingTemplate;
 
     @Mock
+    private Template visaInvitationTemplate;
+
+    @Mock
     private Configuration freemarkerConfig;
 
     @Test
     public void testPostConstruct() throws Exception {
         Mockito.when(freemarkerConfig.getTemplate(EgcEmailSenderImpl.PAIRING_TEMPLATE_NAME, "UTF-8"))
                 .thenReturn(pairingTemplate);
+        Mockito.when(freemarkerConfig.getTemplate(EgcEmailSenderImpl.VISA_INVITATION_TEMPLATE_NAME, "UTF-8"))
+                .thenReturn(visaInvitationTemplate);
 
         egcEmailSender.postConstruct();
         Mockito.verify(freemarkerConfig).setClassForTemplateLoading(egcEmailSender.getClass(), EgcEmailSenderImpl.TEMPLATE_PATH);
 
         Assert.assertNotNull(ReflectionTestUtils.getField(egcEmailSender, "pairingTemplate"));
+        Assert.assertNotNull(ReflectionTestUtils.getField(egcEmailSender, "visaInvitationTemplate"));
     }
 
     @Test
