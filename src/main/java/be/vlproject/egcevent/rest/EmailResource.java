@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/e-mail")
+@RequestMapping(value = "/api/e-mail")
 public class EmailResource {
 
     @Autowired

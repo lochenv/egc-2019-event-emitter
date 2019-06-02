@@ -2,13 +2,19 @@ package be.vlproject.egcevent.security.dto;
 
 public class UserAuthenticationResponseDto {
 
-    private final String bearer;
+    private final String username;
+    private final String token;
 
-    public UserAuthenticationResponseDto(String bearer) {
-        this.bearer = bearer;
+    public UserAuthenticationResponseDto(final String username, final String token) {
+        this.username = username;
+        this.token = token;
     }
 
-    public String getBearer() {
-        return bearer;
+    public String getUsername() {
+        return username;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

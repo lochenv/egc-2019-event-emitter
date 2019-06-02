@@ -39,17 +39,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(SecurityConstants.AUTHORIZATION_HEADER);
-        if (jwtHelper.isValid(token)) {
-            // parse the token.
-            try {
-                User user = jwtHelper.extractUser(StringUtils.remove(token, SecurityConstants.JWT_BEARER_PREFIX));
+        String bearer = request.getHeader(SecurityConstants.AUTHORIZATION_HEADER);
+        if (bearer.startsWith(SecurityConstants.JWT_BEARER_PREFIX)) {
+            String token = StringUtils.remove(bearer, SecurityConstants.JWT_BEARER_PREFIX);
 
-                if (user != null) {
-                    return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            if (jwtHelper.isValid(token)) {
+                // parse the token.
+                try {
+                    User user = jwtHelper.extractUser(token);
+
+                    if (user != null) {
+                        return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    }
+                } catch (Exception e) {
+                    return null;
                 }
-            } catch (Exception e) {
-                return null;
             }
         }
         return null;

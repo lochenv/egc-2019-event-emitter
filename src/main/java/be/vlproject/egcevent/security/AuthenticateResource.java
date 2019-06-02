@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +43,9 @@ public class AuthenticateResource {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtHelper.generateToken(authentication);
-        return ResponseEntity.ok(new UserAuthenticationResponseDto(jwt));
+
+        LOGGER.info(authentication.getPrincipal().toString());
+        return ResponseEntity.ok(new UserAuthenticationResponseDto(
+                ((User) authentication.getPrincipal()).getUsername(), jwt));
     }
 }
