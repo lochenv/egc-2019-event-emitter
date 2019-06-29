@@ -1,5 +1,6 @@
 package be.vlproject.egcevent;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.Properties;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Ignore("Disabled because of usage of credentials properties")
 public class EgcEventApplicationTests {
 
 	@Test
