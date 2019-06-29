@@ -1,5 +1,6 @@
 package be.vlproject.egcevent.security;
 
+import be.vlproject.egcevent.security.dto.JwtValidateRequestDto;
 import be.vlproject.egcevent.security.dto.UserAuthenticationRequestDto;
 import be.vlproject.egcevent.security.dto.UserAuthenticationResponseDto;
 import org.slf4j.Logger;
@@ -11,11 +12,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 public class AuthenticateResource {
@@ -29,9 +32,7 @@ public class AuthenticateResource {
     private JwtHelper jwtHelper;
 
     @PostMapping(SecurityConstants.AUTH_LOGIN_URL)
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserAuthenticationRequestDto loginRequest) {
-//$2a$10$PWLdjEdaKoavFfWjBWr2buGNijA9VYO5mpGcdFHb2vuY522qIdYrW
-
+    public ResponseEntity<UserAuthenticationResponseDto> authenticateUser(@Valid @RequestBody UserAuthenticationRequestDto loginRequest) {
         LOGGER.info("New authentication request");
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -47,5 +48,12 @@ public class AuthenticateResource {
         LOGGER.info(authentication.getPrincipal().toString());
         return ResponseEntity.ok(new UserAuthenticationResponseDto(
                 ((User) authentication.getPrincipal()).getUsername(), jwt));
+    }
+
+    @PostMapping(SecurityConstants.AUTH_VALID_URL)
+    public ResponseEntity<?> validateToken(@RequestBody JwtValidateRequestDto jwtValidationRequest) {
+        System.out.println(jwtValidationRequest.getBearer());
+
+        return ResponseEntity.ok("Valid");
     }
 }

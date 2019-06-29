@@ -1,9 +1,6 @@
 package be.vlproject.egcevent.configuration;
 
-import be.vlproject.egcevent.security.dto.UserAuthenticationRequestDto;
-import be.vlproject.egcevent.security.dto.UserAuthenticationRequestDtoMixin;
-import be.vlproject.egcevent.security.dto.UserAuthenticationResponseDto;
-import be.vlproject.egcevent.security.dto.UserAuthenticationResponseDtoMixin;
+import be.vlproject.egcevent.security.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -30,6 +27,7 @@ public class JacksonConfig {
 
         objectMapper.addMixIn(UserAuthenticationRequestDto.class, UserAuthenticationRequestDtoMixin.class);
         objectMapper.addMixIn(UserAuthenticationResponseDto.class, UserAuthenticationResponseDtoMixin.class);
+        objectMapper.addMixIn(JwtValidateRequestDto.class, JwtValidateRequestDtoMixin.class);
         return objectMapper;
     }
 }
