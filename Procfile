@@ -1,2 +1,2 @@
-web :
- java -jar target/myapp-1.0.0.jar --spring.config.location=classpath:/application.properties
+web:
+ java -jar target/egc-event-0.0.1-SNAPSHOT.jar --spring.config.location=classpath:/application.properties
