@@ -52,8 +52,14 @@ public class AuthenticateResource {
 
     @PostMapping(SecurityConstants.AUTH_VALID_URL)
     public ResponseEntity<?> validateToken(@RequestBody JwtValidateRequestDto jwtValidationRequest) {
-        System.out.println(jwtValidationRequest.getBearer());
+        LOGGER.info("Validating token [{}]", jwtValidationRequest.getBearer());
 
-        return ResponseEntity.ok("Valid");
+        boolean result = jwtHelper.isValid(jwtValidationRequest.getBearer());
+        LOGGER.debug("Validatoion of token returns : {}", result);
+
+        if (result) {
+            return ResponseEntity.ok("Valid");
+        }
+        return ResponseEntity.ok("Invalid");
     }
 }
