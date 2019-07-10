@@ -1,6 +1,7 @@
 package be.vlproject.egcevent.security;
 
 import be.vlproject.egcevent.security.dto.JwtValidateRequestDto;
+import be.vlproject.egcevent.security.dto.JwtValidateResponseDto;
 import be.vlproject.egcevent.security.dto.UserAuthenticationRequestDto;
 import be.vlproject.egcevent.security.dto.UserAuthenticationResponseDto;
 import org.slf4j.Logger;
@@ -12,13 +13,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @RestController
 public class AuthenticateResource {
@@ -55,11 +54,8 @@ public class AuthenticateResource {
         LOGGER.info("Validating token [{}]", jwtValidationRequest.getBearer());
 
         boolean result = jwtHelper.isValid(jwtValidationRequest.getBearer());
-        LOGGER.debug("Validatoion of token returns : {}", result);
+        LOGGER.debug("Validation of token returns : {}", result);
 
-        if (result) {
-            return ResponseEntity.ok("Valid");
-        }
-        return ResponseEntity.ok("Invalid");
+        return ResponseEntity.ok(new JwtValidateResponseDto(result));
     }
 }

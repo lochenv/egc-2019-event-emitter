@@ -57,6 +57,7 @@ public class EgcEmailSenderImpl implements EgcEmailSender {
 
         String text = FreeMarkerTemplateUtils.processTemplateIntoString(pairingTemplate, pairingTemplateValues.toMap());
 
+        helper.setFrom("info@egc2019.eu");
         helper.setTo(pairingTemplateValues.getEmail());
         helper.setText(text, true);
         helper.setSubject(String.format(

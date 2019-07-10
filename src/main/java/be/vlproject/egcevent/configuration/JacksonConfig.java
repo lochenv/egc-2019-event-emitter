@@ -28,6 +28,7 @@ public class JacksonConfig {
         objectMapper.addMixIn(UserAuthenticationRequestDto.class, UserAuthenticationRequestDtoMixin.class);
         objectMapper.addMixIn(UserAuthenticationResponseDto.class, UserAuthenticationResponseDtoMixin.class);
         objectMapper.addMixIn(JwtValidateRequestDto.class, JwtValidateRequestDtoMixin.class);
+        objectMapper.addMixIn(JwtValidateResponseDto.class, JwtValidateResponseDtoMixin.class);
         return objectMapper;
     }
 }

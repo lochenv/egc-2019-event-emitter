@@ -84,6 +84,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers(SecurityConstants.AUTH_LOGIN_URL+"/**")
                 .permitAll()
+                .antMatchers("/api/notify-round")
+                .permitAll()
                 .anyRequest()
                 .authenticated();
 

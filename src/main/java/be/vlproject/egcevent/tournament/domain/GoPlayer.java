@@ -4,8 +4,8 @@ public class GoPlayer {
 
     private final String lastName;
     private final String firstName;
-    private final String email;
     private final String level;
+    private String email;
 
     public GoPlayer(
             final String lastName,
@@ -26,12 +26,16 @@ public class GoPlayer {
         return firstName;
     }
 
+    public String getLevel() {
+        return level;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public String getLevel() {
-        return level;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

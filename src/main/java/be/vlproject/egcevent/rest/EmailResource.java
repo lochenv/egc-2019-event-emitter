@@ -7,22 +7,16 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping(value = "/api/e-mail")
+//@RestController
+//@RequestMapping(value = "/api/e-mail")
 public class EmailResource {
 
-    @Autowired
+//    @Autowired
     private JavaMailSender sender;
 
-    @GetMapping
-    public String getEmail() {
-        return "Hello World GET";
-    }
-
-    @PostMapping
+//    @PostMapping
     public SimpleEmailResponse sendEmail(@RequestBody SimpleEmailRequest simpleEmailDto) {
 
-        System.out.println("Sending email");
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(simpleEmailDto.getTo());

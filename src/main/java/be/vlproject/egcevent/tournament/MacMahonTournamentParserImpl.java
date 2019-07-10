@@ -2,9 +2,15 @@ package be.vlproject.egcevent.tournament;
 
 import be.vlproject.egcevent.mail.EgcEmailSender;
 import be.vlproject.egcevent.mail.domain.PairingTemplateValues;
+import be.vlproject.egcevent.tournament.domain.EgcPlayer;
 import be.vlproject.egcevent.tournament.domain.GoPlayer;
 import be.vlproject.egcevent.tournament.domain.TournamentInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.template.TemplateException;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -18,7 +24,9 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -39,9 +47,12 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
     @Autowired
     private EgcEmailSender egcEmailSender;
 
-    public void parseAndSend(final Document document) throws XPathExpressionException, TemplateException, IOException, MessagingException {
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    public void parseAndSend(final Document document) throws Exception {
         XPathFactory factory = XPathFactory.newInstance();
 
+        // Extract informations from the file
         TournamentInfo tournamentInfo = extractTournamentInfo(document);
         Map<String, GoPlayer> registeredPlayers = extractPlayerList(document);
 
@@ -53,6 +64,7 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
         for (int i = 0; i < parings.getLength(); i++) {
             GoPlayer black = registeredPlayers.get(roundSelector.evaluate(BLACK_PLAYER_ID, parings.item(i)));
             GoPlayer white = registeredPlayers.get(roundSelector.evaluate(WHITE_PLAYER_ID, parings.item(i)));
+
             if (StringUtils.hasText(black.getEmail())) {
                 egcEmailSender.sendPairing(
                         generateTemplateValues(
@@ -95,7 +107,7 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
         );
     }
 
-    private TournamentInfo extractTournamentInfo(final Document document) throws XPathExpressionException {
+    private TournamentInfo extractTournamentInfo(final Document document) throws Exception {
         XPathFactory factory = XPathFactory.newInstance();
         XPath tournamentInfoSelector = factory.newXPath();
 
@@ -108,23 +120,44 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
 
     }
 
-    private Map<String, GoPlayer> extractPlayerList(final Document document) throws XPathExpressionException {
+    private Map<String, GoPlayer> extractPlayerList(final Document document) throws Exception {
         XPathFactory factory = XPathFactory.newInstance();
         XPath players = factory.newXPath();
 
         NodeList playersNode = (NodeList) players.evaluate(PLAYERS_NODE, document, XPathConstants.NODESET);
         Map<String, GoPlayer> registeredPlayers = new HashMap<>();
 
+        // Retrieve all players from Database
+        HttpClient client = HttpClients.createDefault();
+        HttpResponse response = client.execute(new HttpGet("http://localhost/egc2019php/subscribers/read.php"));
+        final List<EgcPlayer> egcPlayers;
+        if (response.getStatusLine().getStatusCode() == 200) { // OK
+            egcPlayers = objectMapper.readValue(
+                    response.getEntity().getContent(),
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, EgcPlayer.class));
+        } else {
+            egcPlayers = Collections.emptyList();
+        }
+
         for (int i = 0; i < playersNode.getLength(); i++) {
             Node playerNode = (Node) players.evaluate(GOPLAYER_SUBNODE, playersNode.item(i), XPathConstants.NODE);
+            GoPlayer extracted = new GoPlayer(
+                    players.evaluate(GOPLAYER_LAST_NAME, playerNode),
+                    players.evaluate(GOPLAYER_FIRST_NAME, playerNode),
+                    players.evaluate(GOPLAYER_EMAIL, playersNode.item(i)),
+                    players.evaluate(GOPLAYER_LEVEL, playerNode)
+            );
+            if (!StringUtils.hasText(extracted.getEmail())) {
+                egcPlayers.stream()
+                        .filter(withLastName -> withLastName.getLastName().equals(extracted.getLastName()))
+                        .filter(withFirstName -> withFirstName.getFirstName().equals(extracted.getFirstName()))
+                        .filter(EgcPlayer::getNotification)
+                        .findAny()
+                        .ifPresent(egcPlayer -> extracted.setEmail(egcPlayer.getEmail()));
+            }
             registeredPlayers.put(
                     players.evaluate("Id", playersNode.item(i)),
-                    new GoPlayer(
-                            players.evaluate(GOPLAYER_LAST_NAME, playerNode),
-                            players.evaluate(GOPLAYER_FIRST_NAME, playerNode),
-                            players.evaluate(GOPLAYER_EMAIL, playersNode.item(i)),
-                            players.evaluate(GOPLAYER_LEVEL, playerNode)
-                    ));
+                    extracted);
         }
 
         return registeredPlayers;

@@ -115,6 +115,8 @@ public class PairingTemplateValues {
             model.put("description",
                     HtmlUtils.htmlEscape(getDescription(), "UTF-8")
                             .replaceAll("(?:\\r\\n|\\r|\\n)","<br>"));
+        } else {
+            model.put("description", "");
         }
         return model;
     }

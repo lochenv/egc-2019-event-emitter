@@ -24,7 +24,8 @@
     Have a nice game and a lovely time in Brussels !
 </p>
 <p style="font-size: .75em">
-    If you don't want to receive this e-mails please inform people at registration desk
+    If you don't want to receive this e-mails please reply this address
+    <a href="mailto:info@egc2019.eu">info@egc2019.eu</a>
 </p>
 </body>
 </html>
