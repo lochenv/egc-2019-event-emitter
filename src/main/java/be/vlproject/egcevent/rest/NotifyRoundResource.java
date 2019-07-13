@@ -20,11 +20,11 @@ public class NotifyRoundResource {
     private MacMahonTournamentParser parser;
 
     @PostMapping("/api/notify-round")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document xml = builder.parse(file.getInputStream());
         try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document xml = builder.parse(file.getInputStream());
             return ResponseEntity.ok(parser.parseAndSend(xml));
         } catch(Exception e) {
             return ResponseEntity.status(412).body(new ErrorResponse(e.getMessage()));
