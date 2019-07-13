@@ -1,5 +1,6 @@
 package be.vlproject.egcevent.rest;
 
+import be.vlproject.egcevent.rest.domain.ErrorResponse;
 import be.vlproject.egcevent.tournament.MacMahonTournamentParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,15 @@ public class NotifyRoundResource {
     private MacMahonTournamentParser parser;
 
     @PostMapping("/api/notify-round")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document xml = builder.parse(file.getInputStream());
-        System.out.println(xml);
-        parser.parseAndSend(xml);
-        return ResponseEntity.ok("Uploaded");
+        try {
+            return ResponseEntity.ok(parser.parseAndSend(xml));
+        } catch(Exception e) {
+            return ResponseEntity.status(412).body(new ErrorResponse(e.getMessage()));
+        }
+
     }
 }

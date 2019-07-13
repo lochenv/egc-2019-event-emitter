@@ -2,6 +2,7 @@ package be.vlproject.egcevent.tournament;
 
 import be.vlproject.egcevent.mail.EgcEmailSender;
 import be.vlproject.egcevent.mail.domain.PairingTemplateValues;
+import be.vlproject.egcevent.services.PlayerHttpService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,7 @@ import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.Collections;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MacMahonTournamentParserImplTest {
@@ -20,6 +22,9 @@ public class MacMahonTournamentParserImplTest {
 
     @Mock
     private EgcEmailSender emailSender;
+
+    @Mock
+    private PlayerHttpService playerHttpService;
 
     @Captor
     private ArgumentCaptor<PairingTemplateValues> pairingCaptor;
@@ -32,7 +37,9 @@ public class MacMahonTournamentParserImplTest {
                 "test-tournament.xml"
         ));
 
+        Mockito.when(playerHttpService.findAll()).thenReturn(Collections.emptyList());
         parser.parseAndSend(xml);
+        Mockito.verify(playerHttpService).findAll();
         Mockito.verify(emailSender, Mockito.times(2)).sendPairing(pairingCaptor.capture());
 
         Assert.assertEquals("Wrong number of event sent", 2, pairingCaptor.getAllValues().size());

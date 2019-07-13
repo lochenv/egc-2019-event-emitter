@@ -1,6 +1,10 @@
 package be.vlproject.egcevent.configuration;
 
+import be.vlproject.egcevent.rest.domain.ErrorResponse;
+import be.vlproject.egcevent.rest.domain.ErrorResponseMixin;
+import be.vlproject.egcevent.rest.domain.SendPairingReportMixin;
 import be.vlproject.egcevent.security.dto.*;
+import be.vlproject.egcevent.tournament.domain.SendPairingReport;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -29,6 +33,8 @@ public class JacksonConfig {
         objectMapper.addMixIn(UserAuthenticationResponseDto.class, UserAuthenticationResponseDtoMixin.class);
         objectMapper.addMixIn(JwtValidateRequestDto.class, JwtValidateRequestDtoMixin.class);
         objectMapper.addMixIn(JwtValidateResponseDto.class, JwtValidateResponseDtoMixin.class);
+        objectMapper.addMixIn(ErrorResponse.class, ErrorResponseMixin.class);
+        objectMapper.addMixIn(SendPairingReport.class, SendPairingReportMixin.class);
         return objectMapper;
     }
 }

@@ -2,20 +2,14 @@ package be.vlproject.egcevent.tournament;
 
 import be.vlproject.egcevent.mail.EgcEmailSender;
 import be.vlproject.egcevent.mail.domain.PairingTemplateValues;
+import be.vlproject.egcevent.services.PlayerHttpService;
 import be.vlproject.egcevent.tournament.domain.EgcPlayer;
 import be.vlproject.egcevent.tournament.domain.GoPlayer;
+import be.vlproject.egcevent.tournament.domain.SendPairingReport;
 import be.vlproject.egcevent.tournament.domain.TournamentInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -43,9 +37,10 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
     @Autowired
     private EgcEmailSender egcEmailSender;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private PlayerHttpService egcPlayerService;
 
-    public void parseAndSend(final Document document) throws Exception {
+    public SendPairingReport parseAndSend(final Document document) throws Exception {
         XPathFactory factory = XPathFactory.newInstance();
 
         // Extract informations from the file
@@ -57,28 +52,43 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
 
         NodeList parings = (NodeList) roundSelector.evaluate("Pairing", round, XPathConstants.NODESET);
 
+        SendPairingReport report = new SendPairingReport();
         for (int i = 0; i < parings.getLength(); i++) {
             GoPlayer black = registeredPlayers.get(roundSelector.evaluate(BLACK_PLAYER_ID, parings.item(i)));
             GoPlayer white = registeredPlayers.get(roundSelector.evaluate(WHITE_PLAYER_ID, parings.item(i)));
 
             if (StringUtils.hasText(black.getEmail())) {
-                egcEmailSender.sendPairing(
-                        generateTemplateValues(
-                                tournamentInfo,
-                                black,
-                                white,
-                                roundSelector.evaluate(BOARD_NUMBER, parings.item(i)), true));
+                try {
+                    egcEmailSender.sendPairing(
+                            generateTemplateValues(
+                                    tournamentInfo,
+                                    black,
+                                    white,
+                                    roundSelector.evaluate(BOARD_NUMBER, parings.item(i)), true));
+                    report.addSucceeded(black);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    report.addInError(black);
+                }
             }
 
             if (StringUtils.hasText(white.getEmail())) {
-                egcEmailSender.sendPairing(
-                        generateTemplateValues(
-                                tournamentInfo,
-                                white,
-                                black,
-                                roundSelector.evaluate(BOARD_NUMBER, parings.item(i)), false));
+                try {
+                    egcEmailSender.sendPairing(
+                            generateTemplateValues(
+                                    tournamentInfo,
+                                    white,
+                                    black,
+                                    roundSelector.evaluate(BOARD_NUMBER, parings.item(i)), false));
+                    report.addSucceeded(white);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    report.addInError(white);
+                }
             }
         }
+
+        return report;
     }
 
     private PairingTemplateValues generateTemplateValues(
@@ -124,29 +134,7 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
         Map<String, GoPlayer> registeredPlayers = new HashMap<>();
 
         // Retrieve all players from Database
-        HttpClient client = HttpClients.createDefault();
-        HttpGet readPlayersRequest = new HttpGet("http://localhost/egc2019php/subscribers/read.php");
-
-        Optional.of(RequestContextHolder.getRequestAttributes())
-                .filter(requestAttributes -> requestAttributes instanceof ServletRequestAttributes)
-                .map(ServletRequestAttributes.class::cast)
-                .map(ServletRequestAttributes::getRequest)
-                .ifPresent(request ->
-                        readPlayersRequest.addHeader("origin",
-                                StringUtils.replace(
-                                        request.getRequestURL().toString(),
-                                        request.getRequestURI(),
-                                        ""
-                                )));
-        HttpResponse response = client.execute(readPlayersRequest);
-        final List<EgcPlayer> egcPlayers;
-        if (response.getStatusLine().getStatusCode() == 200) { // OK
-            egcPlayers = objectMapper.readValue(
-                    response.getEntity().getContent(),
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, EgcPlayer.class));
-        } else {
-            egcPlayers = Collections.emptyList();
-        }
+        List<EgcPlayer> egcPlayers = egcPlayerService.findAll();
 
         for (int i = 0; i < playersNode.getLength(); i++) {
             Node playerNode = (Node) players.evaluate(GOPLAYER_SUBNODE, playersNode.item(i), XPathConstants.NODE);
