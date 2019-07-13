@@ -6,7 +6,6 @@ import be.vlproject.egcevent.tournament.domain.EgcPlayer;
 import be.vlproject.egcevent.tournament.domain.GoPlayer;
 import be.vlproject.egcevent.tournament.domain.TournamentInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import freemarker.template.TemplateException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -14,20 +13,17 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.mail.MessagingException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
@@ -129,7 +125,20 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
 
         // Retrieve all players from Database
         HttpClient client = HttpClients.createDefault();
-        HttpResponse response = client.execute(new HttpGet("http://localhost/egc2019php/subscribers/read.php"));
+        HttpGet readPlayersRequest = new HttpGet("http://localhost/egc2019php/subscribers/read.php");
+
+        Optional.of(RequestContextHolder.getRequestAttributes())
+                .filter(requestAttributes -> requestAttributes instanceof ServletRequestAttributes)
+                .map(ServletRequestAttributes.class::cast)
+                .map(ServletRequestAttributes::getRequest)
+                .ifPresent(request ->
+                        readPlayersRequest.addHeader("origin",
+                                StringUtils.replace(
+                                        request.getRequestURL().toString(),
+                                        request.getRequestURI(),
+                                        ""
+                                )));
+        HttpResponse response = client.execute(readPlayersRequest);
         final List<EgcPlayer> egcPlayers;
         if (response.getStatusLine().getStatusCode() == 200) { // OK
             egcPlayers = objectMapper.readValue(
