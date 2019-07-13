@@ -65,7 +65,7 @@ public class EgcEmailSenderImpl implements EgcEmailSender {
                 pairingTemplateValues.getTournamentName(),
                 pairingTemplateValues.getRoundNumber()));
 
-        sender.send(message);
+//        sender.send(message);
     }
 
     @Override

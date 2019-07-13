@@ -15,11 +15,11 @@ public class SendPairingReport {
     }
 
     public List<GoPlayer> getSucceeded() {
-        return Collections.unmodifiableList(succeeded);
+        return succeeded;
     }
 
     public List<GoPlayer> getInError() {
-        return Collections.unmodifiableList(inError);
+        return inError;
     }
 
     public void addSucceeded(GoPlayer player) {
