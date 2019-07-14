@@ -56,7 +56,7 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
         for (int i = 0; i < parings.getLength(); i++) {
             GoPlayer black = registeredPlayers.get(roundSelector.evaluate(BLACK_PLAYER_ID, parings.item(i)));
             GoPlayer white = registeredPlayers.get(roundSelector.evaluate(WHITE_PLAYER_ID, parings.item(i)));
-            if (StringUtils.hasText(black.getEmail())) {
+            if (black != null && StringUtils.hasText(black.getEmail())) {
                 try {
                     egcEmailSender.sendPairing(
                             generateTemplateValues(
@@ -71,7 +71,7 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
                 }
             }
 
-            if (StringUtils.hasText(white.getEmail())) {
+            if (white!=null && StringUtils.hasText(white.getEmail())) {
                 try {
                     egcEmailSender.sendPairing(
                             generateTemplateValues(
