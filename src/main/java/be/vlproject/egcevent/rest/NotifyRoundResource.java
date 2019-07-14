@@ -27,6 +27,7 @@ public class NotifyRoundResource {
             Document xml = builder.parse(file.getInputStream());
             return ResponseEntity.ok(parser.parseAndSend(xml));
         } catch(Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(412).body(new ErrorResponse(e.getMessage()));
         }
 
