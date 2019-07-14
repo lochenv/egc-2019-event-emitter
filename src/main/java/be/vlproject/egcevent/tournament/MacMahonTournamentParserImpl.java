@@ -96,20 +96,36 @@ public class MacMahonTournamentParserImpl implements MacMahonTournamentParser {
             final GoPlayer opponent,
             final String table,
             final Boolean isBlack) {
-        return new PairingTemplateValues(
-                player.getEmail(),
-                player.getFirstName(),
-                player.getLastName(),
-                opponent.getFirstName(),
-                opponent.getLastName(),
-                opponent.getLevel(),
-                table,
-                isBlack ? "Black" : "White",
-                tournamentInfo.getName(),
-                tournamentInfo.getBoardSize(),
-                tournamentInfo.getCurrentRound().toString(),
-                tournamentInfo.getDescription()
-        );
+        final PairingTemplateValues result;
+        if (opponent == null) {
+            result = new PairingTemplateValues(
+                    player.getEmail(),
+                    player.getFirstName(),
+                    player.getLastName(),
+                    table,
+                    isBlack ? "Black" : "White",
+                    tournamentInfo.getName(),
+                    tournamentInfo.getBoardSize(),
+                    tournamentInfo.getCurrentRound().toString(),
+                    tournamentInfo.getDescription()
+            );
+        } else {
+            result = new PairingTemplateValues(
+                    player.getEmail(),
+                    player.getFirstName(),
+                    player.getLastName(),
+                    opponent.getFirstName(),
+                    opponent.getLastName(),
+                    opponent.getLevel(),
+                    table,
+                    isBlack ? "Black" : "White",
+                    tournamentInfo.getName(),
+                    tournamentInfo.getBoardSize(),
+                    tournamentInfo.getCurrentRound().toString(),
+                    tournamentInfo.getDescription()
+            );
+        }
+        return result;
     }
 
     private TournamentInfo extractTournamentInfo(final Document document) throws Exception {

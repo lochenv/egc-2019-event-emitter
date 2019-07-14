@@ -7,12 +7,19 @@
     Welcome to <span style="font-weight: bold">${tournamentName}</span> round <span
         style="font-weight: bold"> ${roundNumber}</span> !
 </p>
-<p>
-    Your opponent is <span style="font-weight: bold">${opponentFirstName} ${opponentLastName} ${opponentLevel}</span>.
-    Please go to table <span style="font-weight: bold">${table}</span>
-    <br>
-    You are playing <span style="font-weight: bold">${color}</span>
-</p>
+<#if bye>
+    <p>
+        You are <span style="font-weight: bold">bye</span> for this round.
+    </p>
+<#else>
+    <p>
+        Your opponent is <span style="font-weight: bold">${opponentFirstName} ${opponentLastName} ${opponentLevel}</span>.
+        Please go to table <span style="font-weight: bold">${table}</span>
+        <br>
+        You are playing <span style="font-weight: bold">${color}</span>
+    </p>
+</#if>
+
 <p>
     Tournament rules:
     <br>

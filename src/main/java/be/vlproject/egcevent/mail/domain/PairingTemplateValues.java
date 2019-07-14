@@ -24,6 +24,22 @@ public class PairingTemplateValues {
     private final String roundNumber;
     private final String description;
 
+    private final Boolean bye;
+
+    public PairingTemplateValues(
+            final String email,
+            final String firstName,
+            final String lastName,
+            final String table,
+            final String colour,
+            final String tournamentName,
+            final String boardSize,
+            final String roundNumber,
+            final String description) {
+        this(email, firstName, lastName, null, null, null, table, colour, tournamentName, boardSize, roundNumber, description);
+
+    }
+
     public PairingTemplateValues(
             final String email,
             final String firstName,
@@ -49,6 +65,7 @@ public class PairingTemplateValues {
         this.boardSize = boardSize;
         this.roundNumber = roundNumber;
         this.description = description;
+        this.bye = opponentFirstName == null || opponentLastName == null || opponentLevel == null;
     }
 
     public String getEmail() {
@@ -98,16 +115,23 @@ public class PairingTemplateValues {
     public String getDescription() {
         return description;
     }
-    
+
+    public Boolean getBye() {
+        return bye;
+    }
+
     public Map<String, Object> toMap() {
         Map<String, Object> model = new HashMap<>();
         model.put("firstName", getFirstName());
         model.put("lastName", getLastName());
         model.put("tournamentName", getTournamentName());
         model.put("roundNumber", getRoundNumber());
-        model.put("opponentFirstName", getOpponentFirstName());
-        model.put("opponentLastName", getOpponentLastName());
-        model.put("opponentLevel", getOpponentLevel());
+        model.put("bye", getBye());
+        if (!this.bye) {
+            model.put("opponentFirstName", getOpponentFirstName());
+            model.put("opponentLastName", getOpponentLastName());
+            model.put("opponentLevel", getOpponentLevel());
+        }
         model.put("table", getTable());
         model.put("color", getColor());
         model.put("boardSize", getBoardSize());
