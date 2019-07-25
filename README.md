@@ -12,13 +12,15 @@ This is a REST implementation. The application consume and produce JSON.
 This is the High level documentation. A more specific one can be found <TODO  here>.
 
 ### Authentication
-| Action | HTTP Call | Parameters | Response | Return code |
-| Authenticate | POST <root>/api/authenticate | UserAuthenticationRequest | UserAuthenticationResponse | OK : 200 / Unauthorized : 401 |
-| Validate JWT | POST <root>/api/authenticate/valid | JwtValidateRequest | JwtValidateReponse | OK : 200 / Unauthorized : 401 |
+| Action        | HTTP Call                           | Parameters                | Response                    | Return code                   |
+|---------------|-------------------------------------|---------------------------|-----------------------------|------------------------------|
+| **Authenticate**  | POST <root>/api/authenticate        | UserAuthenticationRequest | UserAuthenticationResponse  | OK : 200 / Unauthorized : 401 |
+| **Validate JWT**  | POST <root>/api/authenticate/valid  | JwtValidateRequest        | JwtValidateReponse          | OK : 200 / Unauthorized : 401 |
 
 ### Notify round
-| Action | HTTP Call | Parameters | Response | Return code |
-| Notify | POST <root>/api/notify-round | MultipartFile | SendPairingReport | OK : 200 / Cannot parse file : 412 | 
+| Action      | HTTP Call                    | Parameters    | Response          | Return code                         |
+|-------------|------------------------------|---------------|-------------------|-------------------------------------|
+| **Notify**  | POST <root>/api/notify-round | MultipartFile | SendPairingReport | OK : 200 / Cannot parse file : 412  | 
 
 ## License
 https://github.com/lochenv/egc-2019-event-emitter/blob/master/LICENCE.md
