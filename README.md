@@ -9,7 +9,7 @@ This software is base on the Spring Boot framework running under a Java 8 JVM. O
 
 ## API Description
 This is a REST implementation. The application consume and produce JSON.
-This is the High level documentation. A more specific one can be found <TODO  here>.
+This is the High level documentation, full documentaton can be found in the WiKi
 
 ### Authentication
 | Action        | HTTP Call                           | Parameters                | Response                    | Return code                   |
